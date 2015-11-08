@@ -30,6 +30,15 @@ IBot = {
 			} else {
 				return false;
 			}
+		},
+		getUsers: function() {
+			var users = "";
+			for(var i = 0; i < $(".username").length; i++) {
+				if(!users.includes($(".username")[i].innerHTML) && $(".username")[i].innerHTML != undefined) {
+					users += "@" + $(".username")[i].innerHTML + " ";
+				}
+			}
+			return users;
 		}
 	}
 };
@@ -58,13 +67,16 @@ function commandHandler(data) {
 			var UN = msg.substring(9);
 			if(UN != "") {
 				if(IBot.Tools.lookForUser(UN)) {
-					API.sendChat(":cookie: *hands @" + UN + " a cookie, a note on it reads 'With love from @" + data.user.username + "'* :cookie:");
+					API.sendChat(":cookie: *hands @" + UN + " a cookie, a note on it reads 'With love, from @" + data.user.username + "'* :cookie:");
 				} else {
 					API.sendChat(":x: User not found! :x:");
 				}
 			} else {
 				API.sendChat(":cookie: *hands you a cookie (for @" + data.user.username + ")* :cookie:");
 			}
+		}
+		if(msg === "!list") {
+			API.sendChat("Users 'found': " + IBot.Tools.getUsers());
 		}
 		if(msg === "!autodubup") {
 			API.sendChat("Recommended Dubtrack.FM Extensions: iWoot (same creator as me, iBot), MikuPlugin (made by @rubychan), and/or DubX (made by multiple developers)");
