@@ -2,16 +2,34 @@
 var NAME = "iBot";
 var VERSION = "v1.0.0";
 
-
-// Plug.DJ Ported API for Dubtrack.FM, this code is made by me, sendChat isnt, it is the creator of MikuPlugin
+// Plug.DJ Ported API for Dubtrack.FM
 API = {
-	sendChat: function(String){$("#chat-txt-message").val(String);Dubtrack.room.chat.sendMessage();},
-	ADVANCE: "realtime:room_playlist-update",
+	getDJ: function() {
+		var tempString=$(".currentDJSong")[0].innerHTML;
+		var DJ=tempString.slice(0,tempString.length-11);
+		return DJ;
+	},
+	chatLog: function(String){
+		Dubtrack.room.chat._messagesEl.append("<li class='chat-system-loading system-error'>" + String + "</li>");
+		document.getElementsByClassName("chat-main")[0].scrollIntoView(false);
+	}, //MikuPlugin
+	sendChat: function(String){
+		$("#chat-txt-message").val(String);
+		Dubtrack.room.chat.sendMessage();
+	}, // MikuPlugin
+	setVolume: function(Value){
+		Dubtrack.playerController.setVolume(Value);
+	},
 	CHAT: "realtime:chat-message",
-	USER_LEAVE: "realtime:user-leave",
+	ADVANCE: "realtime:room_playlist-update",
 	USER_JOIN: "realtime:user-join",
-	on: function(Event, Function){Dubtrack.Events.bind(Event, Function);},
-	off: function(Event, Function){Dubtrack.Events.unbind(Event, Function);}
+	USER_LEAVE: "realtime:user-leave",
+	on: function(Event, Function){
+		Dubtrack.Events.bind(Event, Function);
+	},
+	off: function(Event, Function){
+		Dubtrack.Events.unbind(Event, Function);
+	}
 };
 
 // Custom stuff
