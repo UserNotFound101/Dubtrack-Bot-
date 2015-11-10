@@ -61,11 +61,6 @@ IBot = {
 	}
 };
 
-function updateDJ() {
-	var tempString = $(".currentDJSong")[0].innerHTML;
-	var DJ = tempString.slice(0, tempString.length - 11);
-}
-
 function userJoinMsg(data) {
 	API.sendChat("Welcome/Welcome back to the room @" + data.user.username + "!");
 }
@@ -79,7 +74,7 @@ function commandHandler(data) {
 	
 	if(msg.startsWith("!")) {
 		if(msg === "!help") {
-			API.sendChat(IBot.iBot + " user commands: help, cookie @{User}, autodubup");
+			API.sendChat(IBot.iBot + " user commands: help, cookie @{User}, dj, list, autodubup");
 		}
 		if(msg.startsWith("!cookie")) {
 			var UN = msg.substring(9);
@@ -93,6 +88,9 @@ function commandHandler(data) {
 				API.sendChat(":cookie: *hands you a cookie (for @" + data.user.username + ")* :cookie:");
 			}
 		}
+		if(msg === "!dj") {
+			API.sendChat("Current DJ: @" + API.getDJ() + "!");
+		}
 		if(msg === "!list") {
 			API.sendChat("Users 'found': " + IBot.Tools.getUsers());
 		}
@@ -103,7 +101,7 @@ function commandHandler(data) {
 }
 
 function nextSongMsg() {
-	API.sendChat(":musical_note: Now playing: " + $(".currentSong").text() + "! :musical_note:");
+	API.sendChat(":musical_note: Now playing: " + $(".currentSong").text() + "! DJ: " + API.getDJ() + ":musical_note:");
 }
 
 function connectAPI() {
@@ -111,13 +109,11 @@ function connectAPI() {
 	API.on(API.USER_JOIN, userJoinMsg);
 	API.on(API.USER_LEAVE, userLeaveMsg);
 	API.on(API.ADVANCE, nextSongMsg);
-	API.on(API.ADVANCE, updateDJ);
 }
 
 // Just like iWoot, CONNECT EVERYTHING!
 function startUp() {
 	connectAPI();
-	updateDJ();
 	API.sendChat(IBot.iBot + " Started!");
 }
 
