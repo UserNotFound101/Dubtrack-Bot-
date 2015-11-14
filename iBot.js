@@ -98,7 +98,7 @@ if(!isIBotRunning) {
 				API.sendChat("Current DJ: @" + API.getDJ() + "!");
 			}
 			if(msg == "!song") {
-				API.sendChat("Current Song:" + API.getMedia() + "!");
+				API.sendChat("Current Song: " + API.getMedia() + "!");
 			}
 			if(msg === "!list") {
 				API.sendChat("Users 'found': " + IBot.Tools.getUsers());
@@ -123,6 +123,7 @@ if(!isIBotRunning) {
 	// Just like iWoot, CONNECT EVERYTHING!
 	function startUp() {
 		connectAPI();
+		document.getElementById("chat-txt-message").maxLength = 99999999999999999999;
 		isIBotRunning = true;
 		API.sendChat(IBot.iBot + " Started!");
 	}
