@@ -124,6 +124,11 @@ if(!isIBotRunning) {
 	function startUp() {
 		connectAPI();
 		document.getElementById("chat-txt-message").maxLength = 99999999999999999999;
+		// *Special* code for Apple mobile users (iPod, iPhone, iPad)
+		var minimizeBar = document.createElement("meta");
+		minimizeBar.name = "apple-mobile-web-app-capable";
+		minimizeBar.content = "yes";
+		document.getElementsByTagName("head")[0].appendChild(minimizeBar);
 		isIBotRunning = true;
 		API.sendChat(IBot.iBot + " Started!");
 	}
