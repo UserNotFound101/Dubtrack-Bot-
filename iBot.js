@@ -8,32 +8,51 @@ if(!isIBotRunning) {
 	// Plug.DJ Ported API for Dubtrack.FM
 	API = {
 		getDJ: function() {
-			var tempString=$(".currentDJSong")[0].innerHTML;
-			var DJ=tempString.slice(0,tempString.length-11);
-			return DJ;
+			return Dubtrack.room.player.activeSong.attributes.user.attributes.username;
 		},
 		getMedia: function() {
-			return $(".currentSong").text();
+			return Dubtrack.room.player.activeSong.attributes.songInfo.name;
 		},
-		chatLog: function(String){
+		getRole: function(User) {
+			if(User.attributes.roleid != null) {
+				if(User.attributes.roleid.type == "dj") {
+					return "(Resident?) DJ";
+				}
+				if(User.attributes.roleid.type == "vip") {
+					return "VIP";
+				}
+				if(User.attributes.roleid.type == "mod") {
+					return "Moderator";
+				}
+				if(User.attributes.roleid.type == "manager") {
+					return "Manager";
+				}
+				if(User.attributes.roleid.type == "co-owner") {
+					return "Co-Owner (or Owner)";
+				}
+			} else {
+				return "Role not found! (Most likely means default user)";
+			}
+		},
+		chatLog: function(String) {
 			Dubtrack.room.chat._messagesEl.append("<li class='chat-system-loading system-error'>" + String + "</li>");
 			document.getElementsByClassName("chat-main")[0].scrollIntoView(false);
 		}, //MikuPlugin
-		sendChat: function(String){
-			$("#chat-txt-message").val(String);
+		sendChat: function(String) {
+			Dubtrack.room.chat._messageInputEl.val(String);
 			Dubtrack.room.chat.sendMessage();
 		}, // MikuPlugin
-		setVolume: function(Value){
+		setVolume: function(Value) {
 			Dubtrack.playerController.setVolume(Value);
 		},
 		CHAT: "realtime:chat-message",
 		ADVANCE: "realtime:room_playlist-update",
 		USER_JOIN: "realtime:user-join",
 		USER_LEAVE: "realtime:user-leave",
-		on: function(Event, Function){
+		on: function(Event, Function) {
 			Dubtrack.Events.bind(Event, Function);
 		},
-		off: function(Event, Function){
+		off: function(Event, Function) {
 			Dubtrack.Events.unbind(Event, Function);
 		}
 	};
@@ -77,21 +96,23 @@ if(!isIBotRunning) {
 
 	function commandHandler(data) {
 		var msg = data.message;
+		var user = data.user.username;
+		var userId = data.user._id;
 	
 		if(msg.startsWith("!")) {
 			if(msg === "!help") {
-				API.sendChat(IBot.iBot + " user commands: help, cookie @{User}, dj, song, list, autodubup");
+				API.sendChat(IBot.iBot + " user commands: help, cookie @{User}, dj, song, list, autodub");
 			}
 			if(msg.startsWith("!cookie")) {
 				var UN = msg.substring(9);
 				if(UN != "") {
 					if(IBot.Tools.lookForUser(UN)) {
-						API.sendChat(":cookie: *hands @" + UN + " a cookie, a note on it reads 'With love, from @" + data.user.username + "'* :cookie:");
+						API.sendChat(":cookie: *hands @" + UN + " a cookie, a note on it reads 'With love, from @" + user + "'* :cookie:");
 					} else {
 						API.sendChat(":x: User not found! :x:");
 					}
 				} else {
-					API.sendChat(":cookie: *hands you a cookie (for @" + data.user.username + ")* :cookie:");
+					API.sendChat(":cookie: *hands you a cookie (for @" + user + ")* :cookie:");
 				}
 			}
 			if(msg === "!dj") {
@@ -103,8 +124,8 @@ if(!isIBotRunning) {
 			if(msg === "!list") {
 				API.sendChat("Users 'found': " + IBot.Tools.getUsers());
 			}
-			if(msg === "!autodubup") {
-				API.sendChat("Recommended Dubtrack.FM Extensions: iWoot (same creator as me, iBot), MikuPlugin (made by @rubychan), and/or DubX (made by multiple developers)");
+			if(msg === "!autodub") {
+				API.sendChat("Recommended Dubtrack.FM Extensions: iWoot: http://xxskhxx.comoj.com/tools.php, MikuPlugin: http://mikuplugin.me, and/or DubX: https://dubx.net");
 			}
 		}
 	}
@@ -117,18 +138,16 @@ if(!isIBotRunning) {
 		API.on(API.CHAT, commandHandler);
 		API.on(API.USER_JOIN, userJoinMsg);
 		API.on(API.USER_LEAVE, userLeaveMsg);
-		API.on(API.ADVANCE, nextSongMsg);
+		/*
+		* Leaving commented until I can fix the double sending problem
+		* API.on(API.ADVANCE, nextSongMsg);
+		*/
 	}
 
-	// Just like iWoot, CONNECT EVERYTHING!
+	// Connect everything on to start up correctly
 	function startUp() {
 		connectAPI();
 		document.getElementById("chat-txt-message").maxLength = 99999999999999999999;
-		// *Special* code for Apple mobile users (iPod, iPhone, iPad)
-		var minimizeBar = document.createElement("meta");
-		minimizeBar.name = "apple-mobile-web-app-capable";
-		minimizeBar.content = "yes";
-		document.getElementsByTagName("head")[0].appendChild(minimizeBar);
 		isIBotRunning = true;
 		API.sendChat(IBot.iBot + " Started!");
 	}
