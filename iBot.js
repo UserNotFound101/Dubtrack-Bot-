@@ -48,34 +48,31 @@ if(!isIBotRunning) {
 				case "co-owner":
 					return "Co-Owner (or Owner)";
 					break;
-				default:
-					return "Regular User";
-					break;
 				}
 			} else {
 				return "Role not found! (Most likely means default user)";
 			}
 		},
-		chatLog: function(String) {
-			Dubtrack.room.chat._messagesEl.append("<li class='chat-system-loading system-error'>" + String + "</li>");
+		chatLog: function(msg) {
+			Dubtrack.room.chat._messagesEl.append("<li class='chat-system-loading system-error'>" + msg + "</li>");
 			document.getElementsByClassName("chat-main")[0].scrollIntoView(false);
-		}, //MikuPlugin
-		sendChat: function(String) {
-			Dubtrack.room.chat._messageInputEl.val(String);
+		},
+		sendChat: function(msg) {
+			$("#chat-txt-message").val(msg);
 			Dubtrack.room.chat.sendMessage();
-		}, // MikuPlugin
-		setVolume: function(Value) {
-			Dubtrack.playerController.setVolume(Value);
+		},
+		setVolume: function(value) {
+			Dubtrack.playerController.setVolume(value);
 		},
 		CHAT: "realtime:chat-message",
 		ADVANCE: "realtime:room_playlist-update",
 		USER_JOIN: "realtime:user-join",
 		USER_LEAVE: "realtime:user-leave",
-		on: function(Event, Function) {
-			Dubtrack.Events.bind(Event, Function);
+		on: function(theEvent, theFunc) {
+			Dubtrack.Events.bind(theEvent, theFunc);
 		},
-		off: function(Event, Function) {
-			Dubtrack.Events.unbind(Event, Function);
+		off: function(theEvent, theFunc) {
+			Dubtrack.Events.unbind(theEvent, theFunc);
 		}
 	};
 	// Custom stuff
