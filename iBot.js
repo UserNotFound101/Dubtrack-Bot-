@@ -58,8 +58,12 @@ if(!isIBotRunning) {
 			document.getElementsByClassName("chat-main")[0].scrollIntoView(false);
 		},
 		sendChat: function(msg) {
-			$("#chat-txt-message").val(msg);
-			Dubtrack.room.chat.sendMessage();
+			while($("#chat-txt-message").val() != msg) {
+				$("#chat-txt-message").val(msg);
+			}
+			if($("#chat-txt-message").val() == msg) {
+				Dubtrack.room.chat.sendMessage();
+			}
 		},
 		setVolume: function(value) {
 			Dubtrack.playerController.setVolume(value);
@@ -121,16 +125,13 @@ if(!isIBotRunning) {
 			} else {
 				switch (cmd) {
 				case "help":
-					API.sendChat(IBot.iBot + " user commands: help, cookie @{User}, dj, song, list, autodub");
+					API.sendChat(IBot.iBot + " user commands: help, cookie @{User}, dj, song");
 					break;
 				case "dj":
 					API.sendChat("Current DJ: @" + API.getDJ() + "!");
 					break;
 				case "song":
 					API.sendChat("Current Song: " + API.getMedia() + "!");
-					break;
-				case "autodub":
-					API.sendChat("Recommended Dubtrack.FM Extensions: iWoot: http://xxskhxx.comoj.com/tools.php, MikuPlugin: http://mikuplugin.me, and/or DubX: https://dubx.net");
 					break;
 				default:
 					API.sendChat("Command: " + cmd + ", was not found!");
@@ -146,6 +147,7 @@ if(!isIBotRunning) {
 		API.on(API.CHAT, commandHandler);
 		API.on(API.USER_JOIN, userJoinMsg);
 		API.on(API.USER_LEAVE, userLeaveMsg);
+		
 		/*
 		* Leaving commented until I can fix the double sending problem
 		* API.on(API.ADVANCE, nextSongMsg);
@@ -154,8 +156,8 @@ if(!isIBotRunning) {
 	// Just like iWoot, CONNECT EVERYTHING!
 	function startUp() {
 		connectAPI();
-		document.getElementById("chat-txt-message").maxLength = 99999999999999999999;
 		isIBotRunning = true;
+		$("#chat-txt-message").attr("maxlength", "99999999999999999999");
 		API.sendChat(IBot.iBot + " Started!");
 	}
 	startUp();
