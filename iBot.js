@@ -54,8 +54,27 @@ if(!isIBotRunning) {
 			}
 		},
 		chatLog: function(msg) {
-			Dubtrack.room.chat._messagesEl.append("<li class='chat-system-loading system-error'>" + msg + "</li>");
-			document.getElementsByClassName("chat-main")[0].scrollIntoView(false);
+			Dubtrack.room.chat.appendItem(new Dubtrack.Model.chat({
+				user: {
+					_force_updated: null,
+					userInfo: {
+						_id: "565aa52e6fe207830052f580",
+						userid: "565aa52e6fe207830052f57f",
+						__v: 0
+					},
+					_id: "565aa52e6fe207830052f57f",
+					username: "",
+					status: 1,
+					roleid: 1,
+					dubs: 0,
+					created: 0,
+					__v: 0
+				},
+				message: msg,
+				time: Date.now(),
+				realTimeChannel: Dubtrack.room.model.get("realTimeChannel"),
+				type: "chat-message"}
+			));
 		},
 		sendChat: function(msg) {
 			while($("#chat-txt-message").val() != msg) {
