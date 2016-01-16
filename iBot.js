@@ -118,10 +118,10 @@ if(!isIBotRunning) {
 		}
 	};
 	function userJoinMsg(data) {
-		API.sendChat(":wave: Welcome/Welcome back to the room @" + data.user.username + "! :wave:");
+		API.sendChat(":wave: Vítej @" + data.user.username + "! :wave:");
 	}
 	function userLeaveMsg(data) {
-		API.sendChat(":wave: Goodbye @" + data.user.username + "! :wave:");
+		API.sendChat(":wave: Někdy příště @" + data.user.username + "! :wave:");
 	}
 	function commandHandler(data) {
 		var msg = data.message;
