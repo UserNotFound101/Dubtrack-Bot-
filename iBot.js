@@ -118,7 +118,7 @@ if(!isIBotRunning) {
 		}
 	};
 	function userJoinMsg(data) {
-		API.sendChat(":wave: welcome @" + data.user.username + "! :wave:");
+		API.sendChat(":wave: welcome to our dubtack @" + data.user.username + "! :wave:");
 	}
 	function userLeaveMsg(data) {
 		API.sendChat(":wave: see you soon @" + data.user.username + "! :wave:");
@@ -134,7 +134,7 @@ if(!isIBotRunning) {
 				var UN = cmd.substring(8);
 				if(UN != "") {
 					if(IBot.Tools.lookForUser(UN)) {
-						API.sendChat(":cookie: *hands @" + UN + " a cookie, a note on it reads 'With love, from @" + user + "'* :cookie:");
+						API.sendChat(":cookie: *hands @" + UN + " a cookie, a note on it reads 'Dont eat me yet @" + user + "'* :cookie:");
 					} else {
 						API.sendChat(":x: User not found! :x:");
 					}
@@ -147,10 +147,10 @@ if(!isIBotRunning) {
 					API.sendChat(IBot.iBot + " user commands: help, cookie @{User}, dj, song");
 					break;
 				case "dj":
-					API.sendChat("Current DJ: @" + API.getDJ() + "!");
+					API.sendChat("Current DJ Is: @" + API.getDJ() + "!");
 					break;
 				case "song":
-					API.sendChat("Current Song: " + API.getMedia() + "!");
+					API.sendChat("Current Song: Is " + API.getMedia() + "!");
 					break;
 				default:
 					API.sendChat("Command: " + cmd + ", was not found!");
